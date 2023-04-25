@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Request the sudo password
+[ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
+
 printf "\nThis script will install \n\nROS2 Humble\nGazebo Fortres\nNav2\n\n"
 
 # Identify the Ubuntu version
@@ -9,6 +12,8 @@ ubuntu_version=$(cut -f2 <<< "$ubuntu")
 
 printf "You are running: Ubuntu $ubuntu_version.\n"
 printf "Installing appropriate packages for your version of Ubuntu.\n"
+
+apt -q update
 
 #sudo apt update && sudo apt upgrade -y
 #
@@ -25,31 +30,37 @@ printf "Installing appropriate packages for your version of Ubuntu.\n"
 #
 
 
-if [[ "$ubuntu_version" = "20.04" ]]  
-then
-      echo "Ubuntu 20.04 Focal Fossa"
-      python3 -m pip install -U \
-   flake8-blind-except \
-   flake8-builtins \
-   flake8-class-newline \
-   flake8-comprehensions \
-   flake8-deprecated \
-   flake8-import-order \
-   flake8-quotes \
-   "pytest>=5.3" \
-   pytest-repeat \
-   pytest-rerunfailures
-      
-else
-      echo "Ubuntu 22.04 Jammy Jellyfish"
-      sudo apt install -y \
-   python3-flake8-blind-except \
-   python3-flake8-builtins \
-   python3-flake8-class-newline \
-   python3-flake8-comprehensions \
-   python3-flake8-deprecated \
-   python3-flake8-import-order \
-   python3-flake8-quotes \
-   python3-pytest-repeat \
-   python3-pytest-rerunfailures
-fi
+#if [[ "$ubuntu_version" = "20.04" ]]  
+#then
+#      echo "Ubuntu 20.04 Focal Fossa"
+#      python3 -m pip install -U \
+#   flake8-blind-except \
+#   flake8-builtins \
+#   flake8-class-newline \
+#   flake8-comprehensions \
+#   flake8-deprecated \
+#   flake8-import-order \
+#   flake8-quotes \
+#   "pytest>=5.3" \
+#   pytest-repeat \
+#   pytest-rerunfailures
+#
+#else
+#      echo "Ubuntu 22.04 Jammy Jellyfish"
+#      sudo apt install -y \
+#   python3-flake8-blind-except \
+#   python3-flake8-builtins \
+#   python3-flake8-class-newline \
+#   python3-flake8-comprehensions \
+#   python3-flake8-deprecated \
+#   python3-flake8-import-order \
+#   python3-flake8-quotes \
+#   python3-pytest-repeat \
+#   python3-pytest-rerunfailures
+#fi
+
+sudo -k
+
+user=$(logname)
+
+echo -e "\n#Source the ROS2 environment when the terminal opens \nsource /opt/ros/humble/setup.bash" >> /home/$user/.bashrc
